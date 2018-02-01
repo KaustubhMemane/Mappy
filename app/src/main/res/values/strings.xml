@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Mappy</string>
+    <string name="search">Search</string>
+    <string name="map_type_none">map_type_none</string>
+    <string name="my_type_normal">my_type_normal</string>
+    <string name="map_type_satellite">map_type_satellite</string>
+    <string name="map_type_terrain">map_type_terrain</string>
+    <string name="map_type_hybrid">map_type_hybrid</string>
 </resources>
