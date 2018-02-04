@@ -7,6 +7,7 @@
     tools:context="com.kmema.android.mappy.MainActivity">
 
     <EditText
+        android:fontFamily="monospace"
         android:id="@+id/editTextSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -15,7 +16,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="80dp"
-        android:background="@color/colorWhite"
+        android:background="@drawable/edittext_shape"
         android:drawableStart="@drawable/ic_search_holo_light"
         android:elevation="10dp"
         android:hint="@string/search"
@@ -51,5 +52,56 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@drawable/ic_search" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/floatingActionButton"
+        app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:visibility="invisible"
+        android:id="@+id/floatingActionButtonGas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="140dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/floatingActionButton2"
+        android:src="@drawable/ic_local_gas_station" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:visibility="invisible"
+        android:id="@+id/floatingActionButtonHotel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/floatingActionButton2"
+        android:src="@drawable/ic_restaurant" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButtonOption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/floatingActionButton2"
+        app:srcCompat="@android:drawable/arrow_up_float" />
+
 
 </android.support.constraint.ConstraintLayout>
