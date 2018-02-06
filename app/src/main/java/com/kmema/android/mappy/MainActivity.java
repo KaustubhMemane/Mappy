@@ -17,6 +17,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,27 +47,31 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.GeoApiContext;
 
 import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.security.Permission;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
-public class MainActivity extends BaseActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MainActivity extends BaseActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,
+        DataAvailableListener.onDataAvailable{
 
     GoogleMap mGoogleMap;
     EditText editTextSearch;
     FloatingActionButton searchButton;
-    FloatingActionButton restaurantButton, fabOption, fabHotel, fabGas;
+    FloatingActionButton fabOption, fabHotel, fabGas;
     Animation fabOpen, fabClose, rotateFoward, rotateBackward;
     boolean isOpen = false;
 
 
     GoogleApiClient mGoogleApiClient;
-
+    RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +81,6 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Vi
             Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show();
             editTextSearch = findViewById(R.id.editTextSearch);
             searchButton = findViewById(R.id.floatingActionButton);
-            restaurantButton = findViewById(R.id.floatingActionButton2);
 
             fabOption = findViewById(R.id.floatingActionButtonOption);
             fabHotel = findViewById(R.id.floatingActionButtonHotel);
@@ -88,9 +93,14 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Vi
             rotateBackward = AnimationUtils.loadAnimation(this, R.anim.rotate_background);
 
             fabOption.setOnClickListener(this);
+            fabGas.setOnClickListener(this);
+            fabHotel.setOnClickListener(this);
+
             searchButton.setOnClickListener(this);
-            restaurantButton.setOnClickListener(this);
             initMap();
+
+            recyclerView = findViewById(R.id.rvLocationData);
+
         } else {
             // No Google Maps Layout
         }
@@ -178,6 +188,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Vi
 
 
 
+
             mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                 @Override
                 public View getInfoWindow(Marker marker) {
@@ -192,12 +203,17 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Vi
                     TextView tvLatitude = v.findViewById(R.id.tvLatitude);
                     TextView tvLongitude = v.findViewById(R.id.tvLongitude);
                     TextView tvSnippet = v.findViewById(R.id.tvSnippet);
+                    TextView tvDistanceMarker = v.findViewById(R.id.tvDistanceMarker);
 
                     LatLng ll = marker.getPosition();
+                    float results[] = new float[10];
+                    Location.distanceBetween(mGlobalLocation.getLatitude(),mGlobalLocation.getLongitude(),ll.latitude, ll.longitude, results);
                     tvLocality.setText(marker.getTitle());
                     tvLatitude.setText("Latitude: "+ll.latitude);
                     tvLongitude.setText("Longitude: "+ ll.longitude);
                     tvSnippet.setText(marker.getSnippet());
+                    float intoMiles = (float) (results[0] * 0.00062137);
+                    tvDistanceMarker.setText(Float.toString(intoMiles)+" Miles ");
                     return v;
                 }
             });
@@ -302,27 +318,36 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Vi
             case R.id.floatingActionButton:
                 getLocation(view);
                 break;
-            case R.id.floatingActionButton2:
-                getRestaurant(view);
-                Toast.makeText(this, "Working", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.floatingActionButtonOption:
                 animationFab();
                 Toast.makeText(this, "Option", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.floatingActionButtonHotel:
+                getNearByPlaces(view, RESTAURANT);
+                break;
+            case R.id.floatingActionButtonGas:
+                getNearByPlaces(view, GAS_STATION);
+                break;
         }
     }
+    final String RESTAURANT = "restaurant";
+    final String GAS_STATION = "gas_station";
+    final String HOSPITAL = "hospital";
+    final String SCHOOL = "school";
 
-    private void getRestaurant(View view) {
-        String RESTAURANT = "restaurant";
-        String URL = getUrl(mGlobalLocation.getLatitude(),mGlobalLocation.getLongitude(),RESTAURANT);
+    private void getNearByPlaces(View view, String nearByPlaces) {
+        mGoogleMap.clear();
+        String URL = getUrl(mGlobalLocation.getLatitude(),mGlobalLocation.getLongitude(),nearByPlaces);
         Object[] DataTransfer = new Object[2];
         DataTransfer[0] = mGoogleMap;
         DataTransfer[1] = URL;
         Log.d("RESTAURANT CLICK", URL);
-        GetNearByPlacesData getNearByPlacesData = new GetNearByPlacesData();
+        GetNearByPlacesData getNearByPlacesData = new GetNearByPlacesData(MainActivity.this);
         getNearByPlacesData.execute(DataTransfer);
     }
+
+
+
 
     private int PROXIMITY_RADIUS = 10000;
     private String getUrl(double latitude, double longitude, String nearbyPlaces) {
@@ -443,5 +468,22 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Vi
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void displayDataInList(List<HashMap<String, String>> listData) {
+        RvAddressAdapter rvAddressAdapter = new RvAddressAdapter(listData, MainActivity.this);
+        recyclerView.setAdapter(rvAddressAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+
+    private GeoApiContext getGeoContext() {
+        GeoApiContext geoApiContext = new GeoApiContext();
+        return geoApiContext.setQueryRateLimit(3)
+                .setApiKey("AIzaSyCvZAj-cHeNVfvzjJg8vXysjr5wA1yOVfM")
+                .setConnectTimeout(1, TimeUnit.SECONDS)
+                .setReadTimeout(1, TimeUnit.SECONDS)
+                .setWriteTimeout(1, TimeUnit.SECONDS);
     }
 }
