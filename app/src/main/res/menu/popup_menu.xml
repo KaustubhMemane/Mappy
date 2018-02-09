@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/popupAirport"
+        app:showAsAction="ifRoom|withText"
+        android:title="Airport"
+        android:visible="true"/>
+
+    <item android:id="@+id/popupAmusement_park"
+        app:showAsAction="ifRoom|withText"
+        android:title="Amusement Park"
+        android:visible="true"/>
+
+    <item android:id="@+id/popupAquarium"
+        app:showAsAction="ifRoom|withText"
+        android:title="Aquarium"
+        android:visible="true"/>
+
+    <item android:id="@+id/popupArt_gallery"
+        app:showAsAction="ifRoom|withText"
+        android:title=" Art Gallery"
+        android:visible="true"/>
+
+    <item android:id="@+id/popupAtm"
+        app:showAsAction="ifRoom|withText"
+        android:title="Atm"
+        android:visible="true"/>
+
+
+    <!--airport
+    amusement_park
+    aquarium
+    art_gallery
+    atm
+    bakery
+    bank
+    bar
+    beauty_salon
+    bicycle_store
+    book_store
+    bowling_alley
+    bus_station
+    cafe
+    campground
+    car_dealer
+    car_rental-->
+</menu>

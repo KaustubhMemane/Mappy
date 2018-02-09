@@ -15,24 +15,18 @@ import java.util.List;
  */
 
 public class RvAddressAdapter extends RecyclerView.Adapter<RvAddressAdapter.ViewHolder>{
-
-
-
     private List<HashMap<String, String>> listData;
     private Context mContext;
     public RvAddressAdapter(List<HashMap<String, String>> listData, Context mContext) {
         this.listData = listData;
         this.mContext = mContext;
     }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(mContext).inflate(R.layout.row_in_rv, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
-
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvAddressName.setText("Name: "+listData.get(position).get("place_name"));
@@ -45,12 +39,8 @@ public class RvAddressAdapter extends RecyclerView.Adapter<RvAddressAdapter.View
     public int getItemCount() {
         return listData.size();
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder{
-
         TextView tvAddressName, tvVicinity, tvLatitude, tvLongitude;
-
-
         public ViewHolder(View itemView) {
             super(itemView);
                 tvAddressName = itemView.findViewById(R.id.tvName);

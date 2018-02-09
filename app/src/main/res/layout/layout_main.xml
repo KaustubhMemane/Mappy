@@ -6,43 +6,16 @@
     android:layout_height="match_parent"
     tools:context="com.kmema.android.mappy.MainActivity">
 
-    <EditText
-        android:id="@+id/editTextSearch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="80dp"
-        android:background="@color/colorWhite"
-        android:drawableStart="@drawable/ic_search_holo_light"
-        android:elevation="10dp"
-        android:fontFamily="monospace"
-        android:hint="@string/search"
-        android:imeOptions="actionSearch"
-        android:inputType="textPostalAddress"
-        android:maxLines="1"
-        android:onClick="getLocation"
-        android:padding="8dp"
-        android:paddingTop="?attr/actionBarSize"
-        android:selectAllOnFocus="false"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/mapFragment" />
     <fragment
-        android:name="com.google.android.gms.maps.MapFragment"
         android:id="@+id/mapFragment"
+        android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/editTextSearch"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="64dp"
         android:layout_marginRight="16dp"
@@ -61,13 +34,13 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:clickable="true"
+        android:focusable="true"
         android:src="@drawable/ic_local_gas_station"
         android:visibility="invisible"
         app:backgroundTint="@color/colorBlack"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButtonOption"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/floatingActionButtonOption"
-        android:focusable="true" />
+        app:layout_constraintStart_toStartOf="@+id/floatingActionButtonOption" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButtonHotel"
@@ -76,13 +49,13 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:clickable="true"
+        android:focusable="true"
         android:src="@drawable/ic_restaurant"
         android:visibility="invisible"
         app:backgroundTint="@color/colorBlack"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButtonGas"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/floatingActionButtonOption"
-        android:focusable="true" />
+        app:layout_constraintStart_toStartOf="@+id/floatingActionButtonOption" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButtonOption"
@@ -91,23 +64,67 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:clickable="true"
+        android:focusable="true"
         app:backgroundTint="@color/colorBlack"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/floatingActionButton"
-        app:srcCompat="@android:drawable/arrow_up_float"
-        android:focusable="true" />
+        app:srcCompat="@android:drawable/arrow_up_float" />
 
     <ImageView
-        android:elevation="10dp"
-        android:id="@+id/imageView"
+        android:id="@+id/ivButtonDropDownOption"
         android:layout_width="30dp"
         android:layout_height="48dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="16dp"
         android:background="@color/colorWhite"
-        app:layout_constraintBottom_toTopOf="@+id/editTextSearch"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:focusable="true"
+        android:src="@drawable/ic_keyboard_arrow_down"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSearch"
-        android:src="@drawable/ic_keyboard_arrow_down" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="68dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/ivButtonDropDownOption"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mapFragment">
+
+        <EditText
+            android:id="@+id/editTextSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:drawableStart="@drawable/ic_search_holo_light"
+            android:elevation="10dp"
+            android:fontFamily="monospace"
+            android:hint="@string/search"
+            android:imeOptions="actionSearch"
+            android:inputType="textPostalAddress"
+            android:maxLines="1"
+            android:onClick="getLocation"
+            android:padding="8dp"
+            android:paddingTop="?attr/actionBarSize"
+            android:selectAllOnFocus="false"
+            android:textSize="20sp"
+            tools:text="Search" />
+
+        <android.support.v7.widget.RecyclerView
+            android:visibility="gone"
+            android:id="@+id/rvDropDown"
+            android:layout_width="match_parent"
+            android:layout_height="184dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/dropdown_shape" />
+    </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

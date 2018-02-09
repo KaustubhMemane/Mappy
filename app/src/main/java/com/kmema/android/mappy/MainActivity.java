@@ -26,6 +26,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.GeoApiContext;
+import com.kmema.android.mappy.drop_down_list.RvDropDownAdapter;
 
 import org.w3c.dom.Text;
 
@@ -66,12 +69,13 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Vi
     EditText editTextSearch;
     FloatingActionButton searchButton;
     FloatingActionButton fabOption, fabHotel, fabGas;
-    Animation fabOpen, fabClose, rotateFoward, rotateBackward;
-    boolean isOpen = false;
-
+    Animation fabOpen, fabClose, rotateFoward, rotateBackward, slideDownAnimation, slideUpAnimation;
+    boolean isOpen = false, slideDown = false;
+    private PopupMenu popupMenu;
+    private ImageView imageView;
 
     GoogleApiClient mGoogleApiClient;
-    RecyclerView recyclerView;
+    RecyclerView recyclerView, dropDownRecyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,9 +93,13 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Vi
             fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open);
             fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close);
 
+            slideUpAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_up);
+            slideDownAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_down);
             rotateFoward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
             rotateBackward = AnimationUtils.loadAnimation(this, R.anim.rotate_background);
+            imageView = findViewById(R.id.ivButtonDropDownOption);;
 
+            imageView.setOnClickListener(this);
             fabOption.setOnClickListener(this);
             fabGas.setOnClickListener(this);
             fabHotel.setOnClickListener(this);
@@ -100,6 +108,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Vi
             initMap();
 
             recyclerView = findViewById(R.id.rvLocationData);
+            dropDownRecyclerView = findViewById(R.id.rvDropDown);
 
         } else {
             // No Google Maps Layout
@@ -252,6 +261,11 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Vi
         }
     }
     public void getGeoCoder(List<Address> addressList) throws IOException {
+        if (addressList== null || addressList.isEmpty())
+        {
+            Toast.makeText(this, "Could not found!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Address address = addressList.get(0);
         String locality = address.getLocality();
         Toast.makeText(this, locality, Toast.LENGTH_SHORT).show();
@@ -327,6 +341,41 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Vi
                 break;
             case R.id.floatingActionButtonGas:
                 getNearByPlaces(view, GAS_STATION);
+                break;
+            case R.id.ivButtonDropDownOption:
+                if (!slideDown){
+                    dropDownRecyclerView.setVisibility(View.VISIBLE);
+                    RvDropDownAdapter rvDropDownAdapter = new RvDropDownAdapter(MainActivity.this);
+                    dropDownRecyclerView.setAdapter(rvDropDownAdapter);
+                    dropDownRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+                    dropDownRecyclerView.startAnimation(slideDownAnimation);
+                    dropDownRecyclerView.setClickable(true);
+                    dropDownRecyclerView.setFocusable(true );
+                    slideDown = true;
+                }else{
+                    dropDownRecyclerView.startAnimation(slideUpAnimation);
+                    dropDownRecyclerView.setClickable(false);
+                    dropDownRecyclerView.setFocusable(false);
+                    slideDown = false;
+                }
+/*
+                popupMenu = new PopupMenu(MainActivity.this,view);
+                popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+                    @Override
+                    public void onDismiss(PopupMenu popupMenu) {
+
+                    }
+                });
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        return false;
+                    }
+                });
+                popupMenu.inflate(R.menu.popup_menu);
+                popupMenu.show();
+*/
+                Toast.makeText(this, "Clicking", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

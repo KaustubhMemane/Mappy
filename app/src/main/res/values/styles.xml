@@ -13,7 +13,8 @@
         <item name="android:windowFullscreen">false</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="actionOverflowButtonStyle">@style/MyActionBarButtonOverflow</item>
-
+        <item name="popupMenuStyle">@style/AndroidSRC.PopupMenu</item>
+<!--        <item name="android:itemTextAppearance">@style/AndroidSRC.TextAppearance</item>-->
     </style>
 
     
@@ -25,5 +26,15 @@
 
     <style name="MyActionBarButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
         <item name="android:tint">@color/colorBlack</item>
+    </style>
+
+
+    <style name="AndroidSRC.PopupMenu" parent="Widget.AppCompat.Light.ListPopupWindow">
+        <item name="android:popupBackground">#21B6A8</item>
+    </style>
+
+    <style name="AndroidSRC.TextAppearance" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>
